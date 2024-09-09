@@ -1,6 +1,6 @@
 [package]
 name = "take_sni"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "just parse sni from buf"
 license = "MIT"
