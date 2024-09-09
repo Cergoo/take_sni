@@ -19,6 +19,7 @@ pub fn inner_take_sni(b: &[u8]) -> Result<(usize, &[u8]), &[u8]> {
     const NAME_TYPE_HOST_NAME: usize = 0;
     
     let origin_len = b.len(); 
+    if origin_len < 10 { return Err(b); }
     let take1 = map(take(seq(is_any,SeqCount::Exact(1))),|x|{x[0] as usize});    
     let take2 = map(take(seq(is_any,SeqCount::Exact(2))),|x|{BE::read_u16(x) as usize});    
     let take3 = map(take(seq(is_any,SeqCount::Exact(3))),|x|{BE::read_u24(x) as usize}); 
