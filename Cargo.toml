@@ -3,6 +3,9 @@ name = "take_sni"
 version = "0.1.0"
 edition = "2021"
 description = "just parse sni from buf"
+license = "MIT"
+repository = "https://github.com/Cergoo/take_sni"
+categories = ["parsing"]
 
 [dependencies]
 parcelona = "0.1"
