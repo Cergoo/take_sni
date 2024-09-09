@@ -1,0 +1,10 @@
+[package]
+name = "take_sni"
+version = "0.1.0"
+edition = "2021"
+description = "just parse sni from buf"
+
+[dependencies]
+parcelona = "0.1"
+byteorder = "1.5.0"
+log = { version = "*", features = ["max_level_trace", "release_max_level_trace"] }
