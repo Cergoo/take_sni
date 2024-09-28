@@ -3,6 +3,8 @@
 //! this crate uses the parser combinator library and DOES NOT PANIC
 
 use log;
+use parcelona::u8::{*};
+use parcelona::parser_combinators::{PErr, Msg};
 
 /// take sni from buffer and return Option
 pub fn take_sni(b: &[u8]) -> Option<(usize, &[u8])> {
@@ -15,20 +17,23 @@ pub fn take_sni_point(b: &[u8]) -> Option<(usize, usize)> {
 }
 
 /// take sni from buffer and return Result
-pub fn inner_take_sni(b: &[u8]) -> Result<(usize, &[u8]), &[u8]> {
-    use parcelona::u8ext::{*};
+pub fn inner_take_sni(b: &[u8]) -> Result<(usize, &[u8]), PErr<u8>> {
     
     const HANDSHAKE_TYPE_CLIENT_HELLO: usize = 1;
     const EXTENSION_TYPE_SNI: usize = 0;
     const NAME_TYPE_HOST_NAME: usize = 0;
     
     let origin_len = b.len(); 
-    if origin_len < 10 { return Err(b); }
+    if origin_len < 10 { return Err(PErr::new(b)); }
 
     let b = &b[5..]; 
     // Handshake message type.
     let (b, c) = take_len_be_u8(b)?;
-    if c!= HANDSHAKE_TYPE_CLIENT_HELLO { return Err(b"Er"); } 
+    if c!= HANDSHAKE_TYPE_CLIENT_HELLO {
+        let mut e =  PErr::new(b);
+        e.user_msg_push(Msg::Str("HANDSHAKE_TYPE_CLIENT_HELLO error"));        
+        return Err(e);
+    } 
     
     // Handshake message length.
     let (b, c) = take_len_be_u24(b)?;
